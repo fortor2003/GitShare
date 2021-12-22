@@ -1,0 +1,38 @@
+version: "3.3"
+
+services:
+  mysql:
+    container_name: "mysql"
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+    volumes:
+      - ./storage/mysql/data:/var/lib/mysql
+      - ./storage/mysql:/etc/mysql/conf.d
+
+  tomcat:
+    container_name: "tomcat"
+    image: tomcat:latest
+    restart: always
+    depends_on:
+      - mysql
+    # command: ["bash","-c","cp -r /usr/local/tomcat/webapps.dist/* /usr/local/tomcat/webapps"]
+    # command: bash -c "cp -r /usr/local/tomcat/webapps.dist/* /usr/local/tomcat/webapps"
+    ports:
+      - "8080:8080"
+    expose:
+      - "3306"
+    volumes:
+      # - ".storage/tomcat/conf:/usr/local/tomcat/conf"
+      - ".storage/tomcat/conf/server.xml:/usr/local/tomcat/conf/server.xml"
+      # - ".storage/tomcat/conf/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml"
+      # - ".storage/tomcat/conf/web.xml:/usr/local/tomcat/conf/web.xml"
+      # - ".storage/tomcat/conf/context.xml:/usr/local/tomcat/conf/context.xml"
+      # - ".storage/tomcat/conf/logging.properties:/usr/local/tomcat/conf/logging.properties"
+      # - ".storage/tomcat/conf/catalina.properties:/usr/local/tomcat/conf/catalina.properties"
+      # - ".storage/tomcat/web/UniTime.war:/usr/local/tomcat/webapps/UniTime.war"
